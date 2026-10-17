@@ -17,11 +17,11 @@ in [IMPACT.md](IMPACT.md).
 ```bash
 git clone https://github.com/DeepCover-spec/Vortex-OTP-classifier.git
 cd Vortex-OTP-classifier
-cp .env.example .env
+cp .env.example .env        # Windows cmd: copy .env.example .env
 docker compose up --build
 # UI:  http://localhost:8501     API docs:  http://localhost:8000/docs
 ```
-Without Docker (Python 3.11): `pip install -r requirements.txt`, `make train`,
+Without Docker (Python 3.11 or 3.12 only, not 3.13+): `pip install -r requirements.txt`, `make train`,
 `uvicorn api.main:app`, `streamlit run ui/app.py`.
 On Windows without `make`, use `run.cmd train` (cmd) or `.\run.ps1 train` (PowerShell).
 
@@ -69,8 +69,7 @@ TODO (P5): summary and link to [IMPACT.md](IMPACT.md).
 ## AI tools used
 - **Claude (Anthropic):** project planning, the repo skeleton and shared-interface stubs, run scripts,
   and the README and architecture diagram drafts.
-- **Cursor Agent:** used by at least one teammate for code drafting. TODO: confirm who and for what.
-- TODO (all): add any other tool you used and what for.
+- **Cursor Agent:** used by Hisshan (P4) for code drafting.
 
 Every AI-written part was reviewed and run by a team member before commit.
 
@@ -78,7 +77,7 @@ Every AI-written part was reviewed and run by a team member before commit.
 | Role | Name |
 |------|------|
 | P1 Lead, repo, integration | Raihan |
-| P2 Data, model, evaluation | |
-| P3 Monitoring, drift response | |
-| P4 Backend, DevOps | |
-| P5 Front end, impact, pitch | |
+| P2 Data, model, evaluation | Adhni |
+| P3 Monitoring, drift response | Anuja |
+| P4 Backend, DevOps | Hisshan |
+| P5 Front end, impact, pitch | Esandi |
