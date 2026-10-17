@@ -19,3 +19,18 @@ data/processed/
 # generated outputs (rebuilt by scripts)
 reports/dataset_report.md
 models/*.joblib
+
+# Extra secrets and databases
+.env.*
+!.env.example
+*.sqlite
+*.sqlite3
+.streamlit/secrets.toml
+
+# Logs, caches, OS files
+*.log
+.pytest_cache/
+.mypy_cache/
+build/
+dist/
+Thumbs.db

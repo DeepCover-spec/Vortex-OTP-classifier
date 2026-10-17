@@ -7,7 +7,11 @@
 > mix, before it silently fails.
 
 ## Who it protects and why now
-TODO (P1 + P5): 3-4 lines. Link [IMPACT.md](IMPACT.md).
+First-time mobile-banking users and pensioners are the people most likely to read a message that says
+"your account is blocked" and share a code under pressure. A user pastes a suspicious message and gets a
+verdict (scam, safe or unsure), a confidence score and the reasons. When scammers change tactics, the
+system notices and falls back to "unsure: never share your OTP, call your bank". Details and sources are
+in [IMPACT.md](IMPACT.md).
 
 ## Quick start
 ```bash
@@ -18,10 +22,30 @@ docker compose up --build
 # UI:  http://localhost:8501     API docs:  http://localhost:8000/docs
 ```
 Without Docker (Python 3.11): `pip install -r requirements.txt`, `make train`,
-`uvicorn api.main:app`, `streamlit run ui/app.py`. On Windows use `.\run.ps1 train`.
+`uvicorn api.main:app`, `streamlit run ui/app.py`.
+On Windows without `make`, use `run.cmd train` (cmd) or `.\run.ps1 train` (PowerShell).
 
 ## Architecture
-TODO (P1): docs/architecture.png plus one paragraph.
+```mermaid
+flowchart LR
+  U["User pastes a message"] --> UI["Streamlit UI"]
+  UI -->|HTTP| API["FastAPI"]
+  API --> N["normalise"] --> M["TF-IDF + calibrated logistic regression"] --> P["Verdict policy: scam / safe / unsure"]
+  API --> L[("SQLite predictions log")]
+  L --> D["Drift monitor: OOV share, confidence, unsure share, language mix"]
+  D -->|"2 of 4 signals breach"| A["Alert: UI banner, alerts table, webhook"]
+  A --> F["Safe fallback: wider unsure band + OTP warning"]
+  P -->|unsure| R["Human review queue"]
+  R --> T["Retrain trigger"]
+  T --> G{"Promotion gate: test macro-F1 must hold"}
+  G -->|pass| M
+  O["Offline: generate.py + UCI ham"] --> TR["train.py"] --> M
+  TR --> REF["reference.json"] --> D
+```
+A message goes through the shared normaliser and the calibrated model, and a threshold policy turns the
+probability into scam, safe or unsure. Every prediction is logged, the monitor compares recent traffic
+with training statistics, and drift triggers a safe fallback, human review and a gated retrain.
+Shared interfaces are described in [docs/INTERFACES.md](docs/INTERFACES.md).
 
 ## Data
 TODO (P2 + P1): sources with licences, test set, shifted set. UCI SMS Spam Collection (CC BY 4.0,
@@ -43,13 +67,17 @@ replacement for bank verification).
 TODO (P5): summary and link to [IMPACT.md](IMPACT.md).
 
 ## AI tools used
-TODO (all): list each tool and what it was used for. Every AI-written part was reviewed and run by
-a team member before commit.
+- **Claude (Anthropic):** project planning, the repo skeleton and shared-interface stubs, run scripts,
+  and the README and architecture diagram drafts.
+- **Cursor Agent:** used by at least one teammate for code drafting. TODO: confirm who and for what.
+- TODO (all): add any other tool you used and what for.
+
+Every AI-written part was reviewed and run by a team member before commit.
 
 ## Team
 | Role | Name |
 |------|------|
-| P1 Lead, repo, integration | |
+| P1 Lead, repo, integration | Raihan |
 | P2 Data, model, evaluation | |
 | P3 Monitoring, drift response | |
 | P4 Backend, DevOps | |
