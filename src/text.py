@@ -28,6 +28,8 @@ TANGLISH_WORDS = {"unga", "pannunga", "sollunga", "illa", "aagiduchu", "irukku",
 
 def normalise(text: str) -> str:
     t = unicodedata.normalize("NFC", str(text))
+    # masked text from the monitoring log (used when retraining on reviewed messages)
+    t = t.replace("<CODE>", " zzcode ").replace("<PHONE>", " zzphone ").replace("<NUM>", " zznum ")
     t = URL_RE.sub(lambda m: " zzurl " + re.sub(r"[^a-z]+", " ", m.group(0).lower()) + " ", t)
     t = PHONE_RE.sub(" zzphone ", t)
     t = AMOUNT_RE.sub(" zzamt ", t)
