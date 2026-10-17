@@ -1,4 +1,4 @@
-# docker-compose.yml (owner: P4 — Backend / DevOps)
+# docker-compose.yml (owner: P4 Backend / DevOps)
 services:
   api:
     build:
@@ -25,11 +25,11 @@ services:
       context: .
       dockerfile: docker/Dockerfile.ui
     ports:
-      - "8501:8501"
+      - "8080:80"
     env_file:
       - .env
     environment:
-      API_URL: http://api:8000
+      OTP_API_BASE: http://127.0.0.1:8000
     depends_on:
       api:
         condition: service_healthy
