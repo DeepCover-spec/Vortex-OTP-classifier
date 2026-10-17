@@ -1,0 +1,19 @@
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --base: #030403;
+  --surface: #070907;
+  --surface-2: #0a0c0a;
+  --line: rgba(57, 255, 20, 0.28);
+  --glow: rgba(57, 255, 20, 0.22);
+  --accent: #39ff14;
+  --accent-bright: #39ff14;
+  --accent-hover: #5dff3a;
+  --text: #f3f5f3;
+  --text-2: #c6cac6;
+  --muted: #8e938e;
+  --danger: #e15b52;
+  --amber: #d7a441;
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.62);
+  --glow-green: 0 0 18px rgba(57, 255, 20, 0.45);
+}
