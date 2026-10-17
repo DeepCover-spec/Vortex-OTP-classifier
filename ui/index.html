@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#030403" />
+    <title>OTP Shield</title>
+    <meta name="description" content="Check synthetic Sri Lankan bank messages for OTP theft. Unfamiliar wording is held for a person." />
+    <link rel="stylesheet" href="variables.css" />
+    <link rel="stylesheet" href="animations.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="nav">
+      <a class="brand" href="#overview">OTP Shield</a>
+      <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav id="site-nav" aria-label="Page">
+        <a href="#overview">Overview</a>
+        <a href="#check">Check</a>
+        <a href="#monitor">Drift</a>
+        <a href="#review">Review</a>
+      </nav>
+    </header>
+    <main>
+      <section class="hero" id="overview">
+        <div>
+          <p class="eyebrow">Sri Lanka · synthetic bank messages</p>
+          <h1>Catch the OTP ask. Notice when the scam changes shape.</h1>
+          <p class="lede">Paste a message. The checker returns safe, scam, or unsure. Unfamiliar wording is held for a person instead of failing quietly.</p>
+          <p class="warning">Your bank will never ask for your OTP.</p>
+          <div class="actions">
+            <a class="primary" href="#check">Check a message</a>
+            <a class="secondary" href="#monitor">Watch for drift</a>
+          </div>
+        </div>
+        <aside class="system" data-health aria-busy="true">
+          <p class="loading-line">Loading system status…</p>
+          <div class="skeleton"></div>
+          <div class="skeleton"></div>
+        </aside>
+      </section>
+
+      <section class="panel" id="check">
+        <p class="eyebrow">Check a message</p>
+        <h2>Safe, scam, or not sure yet.</h2>
+        <form data-form>
+          <label for="message">Message</label>
+          <textarea id="message" data-message maxlength="1000" placeholder="Paste SMS or notification text here to verify..."></textarea>
+          <div class="row">
+            <span data-count>0/1000</span>
+            <div class="form-actions">
+              <button type="button" class="ghost" data-clear>Clear</button>
+              <button class="primary" type="submit" data-analyze>Analyze message</button>
+            </div>
+          </div>
+        </form>
+        <div class="scan" data-scan hidden><span></span></div>
+        <div class="chips" data-samples></div>
+        <p class="banner banner-warn" data-error></p>
+        <div data-result></div>
+      </section>
+
+      <section class="panel" id="monitor">
+        <p class="eyebrow">Watch for drift</p>
+        <h2>The lights use the live log.</h2>
+        <p class="banner" data-drift>Loading drift status…</p>
+        <div class="signals" data-signals aria-busy="true">
+          <p class="loading-line">Loading drift signals…</p>
+        </div>
+        <div class="filters" data-filters>
+          <button type="button" class="is-on" data-series="all" aria-pressed="true">All</button>
+          <button type="button" data-series="mean_oov" aria-pressed="false">Unfamiliar wording</button>
+          <button type="button" data-series="mean_confidence" aria-pressed="false">Mean confidence</button>
+          <button type="button" data-series="unsure_share" aria-pressed="false">Unsure share</button>
+          <button type="button" data-series="language_tv" aria-pressed="false">Language mix</button>
+        </div>
+        <div class="charts" data-charts></div>
+        <div class="form-actions">
+          <button type="button" class="ghost" data-refresh>Refresh</button>
+          <button type="button" class="secondary" data-retrain>Retrain</button>
+        </div>
+        <p class="note" data-retrain-note></p>
+      </section>
+
+      <section class="panel" id="review">
+        <p class="eyebrow">Human review</p>
+        <h2>Messages the checker would not decide alone.</h2>
+        <p data-review-note></p>
+        <ul class="queue" data-queue aria-busy="true">
+          <li class="loading-line">Loading the review queue…</li>
+        </ul>
+      </section>
+    </main>
+    <footer>
+      <nav class="footer-links" aria-label="On this page">
+        <a href="#overview">Overview</a>
+        <a href="#check">Check</a>
+        <a href="#monitor">Drift</a>
+        <a href="#review">Review</a>
+      </nav>
+      <p>OTP Shield. Every sample is synthetic. Hela Bank, Serendib Pay, and SL-UDI Helpdesk are fictional. This page does not send messages.</p>
+    </footer>
+    <button type="button" class="to-top" data-top hidden>Back to top</button>
+    <div class="toasts" data-toasts aria-live="polite"></div>
+    <div class="modal" data-modal hidden>
+      <div class="modal-backdrop" data-modal-close></div>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <h2 id="modal-title">Clear this message?</h2>
+        <p>The draft and the result on this page will be removed. Nothing is sent to the checker.</p>
+        <div class="row">
+          <button type="button" class="primary" data-modal-confirm>Clear message</button>
+          <button type="button" class="ghost" data-modal-close>Cancel</button>
+        </div>
+      </div>
+    </div>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
