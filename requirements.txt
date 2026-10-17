@@ -1,1 +1,27 @@
+# Vortex OTP classifier: pinned dependencies (Python 3.11 or 3.12)
 
+# Data and model
+numpy==2.2.6
+pandas==2.2.3
+scipy==1.15.3
+scikit-learn==1.6.1
+joblib==1.5.1
+
+# Charts for reports (confusion matrix, reliability curve)
+matplotlib==3.10.3
+
+# API service
+fastapi==0.115.12
+uvicorn[standard]==0.34.3
+pydantic==2.11.5
+python-dotenv==1.1.0
+pyyaml==6.0.2
+
+# Front end
+streamlit==1.45.1
+plotly==6.1.2
+requests==2.32.3
+
+# Tests and API client for the demo script
+pytest==8.3.5
+httpx==0.28.1
