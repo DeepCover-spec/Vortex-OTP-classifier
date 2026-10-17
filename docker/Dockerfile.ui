@@ -1,14 +1,17 @@
-# docker/Dockerfile.ui (owner: P4)
-FROM python:3.11-slim
+FROM nginx:alpine
 
-WORKDIR /app
+COPY ui/ /usr/share/nginx/html/
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# OTP_API_BASE is read by the browser, not by nginx. Default is http://127.0.0.1:8000.
+RUN cat > /docker-entrypoint.d/40-otp-config.sh << 'EOF'
+#!/bin/sh
+set -eu
+BASE="${OTP_API_BASE:-http://127.0.0.1:8000}"
+case "$BASE" in
+  *\"*|*"'"*|*\ *|*\\*) BASE="http://127.0.0.1:8000" ;;
+esac
+printf 'window.OTP_API_BASE = "%s";\n' "$BASE" > /usr/share/nginx/html/config.js
+EOF
+RUN chmod +x /docker-entrypoint.d/40-otp-config.sh
 
-COPY ui ./ui
-COPY src ./src
-
-EXPOSE 8501
-ENV API_URL=http://api:8000
-CMD ["streamlit", "run", "ui/app.py", "--server.address=0.0.0.0", "--server.port=8501"]
+EXPOSE 80
