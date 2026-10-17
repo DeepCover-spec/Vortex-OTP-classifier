@@ -1,12 +1,21 @@
+# local environment and editors
 .venv/
 venv/
 __pycache__/
 *.pyc
 .env
 *.db
-data/raw/
 .vscode/
 .idea/
 .DS_Store
 .ipynb_checkpoints/
 *.egg-info/
+
+# data: everything is rebuilt by python data/generate.py
+data/raw/
+data/processed/
+*.csv
+
+# generated outputs (rebuilt by scripts)
+reports/dataset_report.md
+models/*.joblib
