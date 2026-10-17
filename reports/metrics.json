@@ -1,0 +1,110 @@
+{
+  "model_version": "v20261017-1204",
+  "test": {
+    "model": {
+      "n": 999,
+      "accuracy": 0.8739,
+      "macro_f1": 0.8732,
+      "scam_recall": 0.8867,
+      "false_alarm_rate_genuine_bank": 0.2351,
+      "false_alarm_rate_all_safe": 0.1366
+    },
+    "baseline_always_safe": {
+      "n": 999,
+      "accuracy": 0.5495,
+      "macro_f1": 0.3547,
+      "scam_recall": 0.0,
+      "false_alarm_rate_genuine_bank": 0.0,
+      "false_alarm_rate_all_safe": 0.0
+    },
+    "baseline_keyword_rule": {
+      "n": 999,
+      "accuracy": 0.7998,
+      "macro_f1": 0.7818,
+      "scam_recall": 0.5689,
+      "false_alarm_rate_genuine_bank": 0.0188,
+      "false_alarm_rate_all_safe": 0.0109
+    },
+    "by_language": {
+      "en": 0.8688,
+      "si": 1.0,
+      "singlish": 0.748,
+      "ta": 0.86,
+      "tanglish": 1.0
+    },
+    "by_subtype": {
+      "bank_genuine": 0.7649,
+      "everyday": 1.0,
+      "otp_scam": 0.8867
+    },
+    "verdicts": {
+      "safe": 0.4094,
+      "scam": 0.3654,
+      "unsure": 0.2252
+    },
+    "confident_verdict_error_rate": 0.0672,
+    "mean_confidence": 0.8684,
+    "mean_oov_share": 0.1808
+  },
+  "shifted": {
+    "model": {
+      "n": 800,
+      "accuracy": 0.74,
+      "macro_f1": 0.7211,
+      "scam_recall": 0.48,
+      "false_alarm_rate_genuine_bank": 0.0,
+      "false_alarm_rate_all_safe": 0.0
+    },
+    "baseline_always_safe": {
+      "n": 800,
+      "accuracy": 0.5,
+      "macro_f1": 0.3333,
+      "scam_recall": 0.0,
+      "false_alarm_rate_genuine_bank": 0.0,
+      "false_alarm_rate_all_safe": 0.0
+    },
+    "baseline_keyword_rule": {
+      "n": 800,
+      "accuracy": 0.79,
+      "macro_f1": 0.789,
+      "scam_recall": 0.7225,
+      "false_alarm_rate_genuine_bank": 0.1425,
+      "false_alarm_rate_all_safe": 0.1425
+    },
+    "by_language": {
+      "en": 0.996,
+      "si": 0.5135,
+      "singlish": 0.7526,
+      "ta": 0.4557,
+      "tanglish": 0.6098
+    },
+    "by_subtype": {
+      "shift_genuine": 1.0,
+      "shift_scam": 0.48
+    },
+    "verdicts": {
+      "safe": 0.5713,
+      "unsure": 0.3525,
+      "scam": 0.0762
+    },
+    "confident_verdict_error_rate": 0.1699,
+    "mean_confidence": 0.8312,
+    "mean_oov_share": 0.312,
+    "shifted_review": {
+      "n": 400,
+      "accuracy": 0.7625,
+      "macro_f1": 0.7483,
+      "scam_recall": 0.525,
+      "false_alarm_rate_genuine_bank": 0.0,
+      "false_alarm_rate_all_safe": 0.0
+    },
+    "shifted_eval": {
+      "n": 400,
+      "accuracy": 0.7175,
+      "macro_f1": 0.693,
+      "scam_recall": 0.435,
+      "false_alarm_rate_genuine_bank": 0.0,
+      "false_alarm_rate_all_safe": 0.0
+    }
+  }
+}

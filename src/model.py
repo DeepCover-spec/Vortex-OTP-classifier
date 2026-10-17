@@ -1,33 +1,75 @@
-"""ScamModel interface (Interface 1). Owner: P2.
+"""ScamModel: the only thing the API needs to import.
 
-STUB so P3, P4 and P5 can build before the real model exists. P2 replaces the body but keeps
-the class name, the `version` attribute and the keys returned by predict().
+    from src.model import ScamModel
+    m = ScamModel()                       # loads models/model.joblib
+    m.predict(["Hela Bank: share the OTP ..."])
+    -> [{"label": "scam", "scam_prob": 0.97, "confidence": 0.97, "verdict": "scam",
+         "reasons": [...], "oov_share": 0.05, "lang": "en", "model_version": "v2026..."}]
 """
-from src.config import verdict_from
-from src.text import normalise
+import sys
+from pathlib import Path
 
-SHARE_WORDS = ("share", "send", "reply", "give", "tell")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+import joblib
+import numpy as np
+
+from src import config
+from src.text import detect_lang, explain, safe_signs, tokens
 
 
 class ScamModel:
-    version = "stub-v0"
+    def __init__(self, path=config.MODEL_PATH):
+        self.load(path)
 
-    def __init__(self, path: str = "models/model.joblib"):
-        self.path = path
+    def load(self, path=config.MODEL_PATH):
+        b = joblib.load(path)
+        self.pipeline, self.vocab, self.version = b["pipeline"], b["vocab"], b["version"]
+        return self
 
-    def predict(self, texts: list[str]) -> list[dict]:
+    def oov_share(self, text: str) -> float:
+        toks = tokens(text)
+        return float(np.mean([t not in self.vocab for t in toks])) if toks else 0.0
+
+    def predict(self, texts, drift_active: bool = False) -> list:
+        texts = [str(t) for t in texts]
+        probs = self.pipeline.predict_proba(texts)[:, 1]
+        t_scam = config.T_SCAM_DRIFT if drift_active else config.T_SCAM
+        t_safe = config.T_SAFE_DRIFT if drift_active else config.T_SAFE
         out = []
-        for text in texts:
-            low = normalise(text).lower()
-            asks_otp = "otp" in low and any(w in low for w in SHARE_WORDS)
-            p = 0.92 if asks_otp else 0.08
+        for text, p in zip(texts, probs):
+            oov = self.oov_share(text)
+            if oov > config.T_OOV:
+                verdict = "unsure"
+            elif p >= t_scam:
+                verdict = "scam"
+            elif p <= t_safe:
+                verdict = "safe"
+            else:
+                verdict = "unsure"
+            reasons = explain(text) if verdict != "safe" else safe_signs(text)
+            if verdict == "unsure" and oov > config.T_OOV:
+                reasons = ["Wording is unlike anything the model was trained on"] + reasons
             out.append({
                 "label": "scam" if p >= 0.5 else "safe",
-                "scam_prob": p,
-                "confidence": max(p, 1 - p),
-                "verdict": verdict_from(p, 0.0),
-                "reasons": ["asks you to share the OTP"] if asks_otp else [],
-                "oov_share": 0.0,
-                "lang": "en",
+                "scam_prob": round(float(p), 4),
+                "confidence": round(float(max(p, 1 - p)), 4),
+                "verdict": verdict,
+                "reasons": reasons,
+                "advice": config.FALLBACK_MESSAGE if verdict == "unsure" else
+                          ("Do not reply or share any code. Your bank will never ask for your OTP." if verdict == "scam" else ""),
+                "oov_share": round(oov, 4),
+                "lang": detect_lang(text),
+                "model_version": self.version,
             })
         return out
+
+
+if __name__ == "__main__":
+    m = ScamModel()
+    for r in m.predict(sys.argv[1:] or [
+        "Hela Bank: Your OTP is 482913. Never share this code with anyone, including bank staff.",
+        "LankaSave: Your account has been blocked. Reply with the OTP sent to your phone to reactivate it.",
+        "Serendib Pay agent here. To finish your SL-UDI enrolment, tell me the number you just got. It is only a reference number.",
+    ]):
+        print(r)

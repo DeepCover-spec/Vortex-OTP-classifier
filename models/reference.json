@@ -1,0 +1,14 @@
+{
+  "model_version": "v20261017-1204",
+  "source": "held-out test set",
+  "mean_confidence": 0.8684,
+  "mean_oov_share": 0.1808,
+  "unsure_share": 0.2252,
+  "lang_mix": {
+    "ta": 0.1502,
+    "singlish": 0.2503,
+    "tanglish": 0.0861,
+    "en": 0.3443,
+    "si": 0.1692
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "version": "v20261017-1204",
+  "trained_at": "2026-10-17T12:04:14",
+  "C": 4.0,
+  "n_train": 4000,
+  "n_scam": 1800,
+  "vocab_size": 689,
+  "train_lang_mix": {
+    "tanglish": 0.11,
+    "ta": 0.15,
+    "si": 0.17,
+    "singlish": 0.25,
+    "en": 0.32
+  },
+  "cv": {
+    "accuracy": 0.954,
+    "macro_f1": 0.9538
+  }
+}
